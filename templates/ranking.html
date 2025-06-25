@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>排行榜｜公寓大廈管理條例線上學習系統</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        table {
+            margin: 0 auto;
+            width: 90%;
+            max-width: 600px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #6A7BA2;
+            padding: 10px;
+        }
+        th {
+            background-color: #6A7BA2;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f4f6f9;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #2C3E50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🏆 排行榜</h2>
+        <table>
+            <tr>
+                <th>名次</th>
+                <th>暱稱</th>
+                <th>分數</th>
+                <th>時間（秒）</th>
+            </tr>
+            {% for i, row in enumerate(ranking) %}
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ row['暱稱'] }}</td>
+                <td>{{ row['分數'] }}</td>
+                <td>{{ row['時間'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="/"><button>返回首頁</button></a>
+        </div>
+    </div>
+</body>
+</html>

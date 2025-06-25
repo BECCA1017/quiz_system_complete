@@ -6,6 +6,7 @@ import csv
 from datetime import datetime
 import os
 
+
 app = Flask(__name__)
 app.secret_key = "secret"
 
@@ -16,17 +17,20 @@ def load_questions():
     df = pd.read_csv(QUESTION_FILE)
     return df.to_dict(orient="records")
 
-def load_leaderboard():
-    if not os.path.exists(LEADERBOARD_FILE):
-        return []
-    with open(LEADERBOARD_FILE, newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
-
 def save_leaderboard(data):
-    with open(LEADERBOARD_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=["nickname", "score", "time"])
+    os.makedirs("data", exist_ok=True)
+    with open("data/ranking.csv", mode="w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=["nickname", "score", "time"])
         writer.writeheader()
         writer.writerows(data)
+
+def load_leaderboard():
+    if not os.path.exists("data/ranking.csv"):
+        return []
+    with open("data/ranking.csv", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        return list(reader)
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -88,6 +92,7 @@ def next_question():
     session["current"] += 1
     return redirect("/question")
 
+
 @app.route("/result")
 def result():
     if "score" not in session or "nickname" not in session or "start_time" not in session:
@@ -107,7 +112,7 @@ def ranking():
     # 讀取排行榜資料
     if os.path.exists("data/ranking.csv"):
         df = pd.read_csv("data/ranking.csv")
-        df = df.sort_values(by=["分數", "時間"], ascending=[False, True]).head(50)
+       df = df.sort_values(by=["score", "time"], ascending=[False, True]).head(50)
         data = df.to_dict(orient="records")
     else:
         data = []

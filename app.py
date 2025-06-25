@@ -102,6 +102,17 @@ def result():
     save_leaderboard(leaderboard)
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
+@app.route("/ranking")
+def ranking():
+    # 讀取排行榜資料
+    if os.path.exists("data/ranking.csv"):
+        df = pd.read_csv("data/ranking.csv")
+        df = df.sort_values(by=["分數", "時間"], ascending=[False, True]).head(50)
+        data = df.to_dict(orient="records")
+    else:
+        data = []
+    return render_template("ranking.html", ranking=data)
+
 @app.route("/favicon.ico")
 def favicon():
     return send_file("static/favicon.ico")

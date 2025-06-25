@@ -112,7 +112,7 @@ def ranking():
     # 讀取排行榜資料
     if os.path.exists("data/ranking.csv"):
         df = pd.read_csv("data/ranking.csv")
-       df = df.sort_values(by=["score", "time"], ascending=[False, True]).head(50)
+        df = df.sort_values(by=["score", "time"], ascending=[False, True]).head(50)
         data = df.to_dict(orient="records")
     else:
         data = []

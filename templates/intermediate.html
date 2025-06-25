@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>第 {{ number }} 題結果</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>第 {{ number }} 題結果</h2>
+        <p><strong>題目：</strong> {{ question['題目'] }}</p>
+        <p>
+            你的答案：
+            <span style="color: {{ 'green' if selected == correct else 'red' }}">
+                {{ question['選項' + selected] if selected in ['1','2','3','4'] else '未作答' }}
+            </span>
+        </p>
+        <p>正確答案：<strong style="color: green">{{ question['選項' + correct] }}</strong></p>
+        <a href="/next"><button>下一題</button></a>
+    </div>
+</body>
+</html>

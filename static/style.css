@@ -9,7 +9,13 @@ body {
     padding: 0;
     text-align: center;
 }
-
+.responsive-logo {
+    width: 100%;
+    max-width: 250px; /* 可依實際 LOGO 大小調整 */
+    height: auto;
+    display: block;
+    margin: 0 auto 20px auto;
+}
 .container {
     max-width: 800px;
     margin: 0 auto;

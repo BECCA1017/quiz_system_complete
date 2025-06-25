@@ -1,78 +1,56 @@
 
 body {
+    background-color: #DFDCD5;
+    font-family: "微軟正黑體", sans-serif;
+    color: #2C3E50;
     font-size: 18px;
     line-height: 1.8;
-    font-family: "微軟正黑體", "Microsoft JhengHei", sans-serif;
-    background-color: #DFDCD5;  /* 主要運行背景 */
-    color: #2C3E50;  /* 主文字顏色 */
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
 .container {
-    max-width: 720px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #FFF;
+    padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
-    color: #2C3E50;
+h1, h2, h3, h4, h5, h6, p, label {
+    text-align: center;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="file"],
+form {
+    display: inline-block;
+    text-align: left;
+    margin-top: 20px;
+}
+
+input[type="text"], input[type="radio"] {
+    margin-bottom: 10px;
+}
+
 button {
-    font-size: 1rem;
-    padding: 10px;
-    margin: 8px 0;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #6A7BA2;  /* 按鈕與重點色 */
+    background-color: #6A7BA2;
     color: white;
+    padding: 10px 20px;
     border: none;
+    font-size: 16px;
     border-radius: 6px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
     background-color: #2C3E50;
 }
 
-.timer-box {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
 .note {
-    background-color: #FFF4B1;  /* 說明區背景 */
+    background-color: #FFF4B1;
     padding: 10px;
-    margin-top: 1rem;
-    border-left: 5px solid #6A7BA2;
-}
-
-.error {
-    color: red;
-    font-weight: bold;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
-
-table, th, td {
-    border: 1px solid #ccc;
-}
-
-th, td {
-    padding: 0.5rem;
-    text-align: center;
+    border-radius: 8px;
+    margin-top: 20px;
 }

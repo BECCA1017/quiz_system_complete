@@ -9,6 +9,11 @@ body {
     padding: 0;
     text-align: center;
 }
+@media (max-width: 768px) {
+  .responsive-logo {
+    max-width: 180px;
+  }
+}
 .responsive-logo {
     width: 100%;
     max-width: 250px; /* 可依實際 LOGO 大小調整 */

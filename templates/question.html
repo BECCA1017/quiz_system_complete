@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第 {{ number }} 題</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <script>
+        let seconds = {{ time_limit }};
+        function countdown() {
+            if (seconds <= 0) {
+                document.getElementById('quizForm').submit();
+            } else {
+                document.getElementById('timer').textContent = seconds;
+                seconds--;
+                setTimeout(countdown, 1000);
+            }
+        }
+        window.onload = countdown;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>第 {{ number }} 題</h2>
+        <p>{{ question['題目'] }}</p>
+        <form id="quizForm" method="POST" action="/submit">
+            <input type="radio" name="answer" value="1" required> {{ question['選項1'] }}<br>
+            <input type="radio" name="answer" value="2"> {{ question['選項2'] }}<br>
+            <input type="radio" name="answer" value="3"> {{ question['選項3'] }}<br>
+            <input type="radio" name="answer" value="4"> {{ question['選項4'] }}<br>
+            <button type="submit">下一題</button>
+        </form>
+        <div class="timer-box">⏳ 剩餘時間：<span id="timer"></span> 秒</div>
+        {% if feedback %}
+        <div class="note">
+            <strong>{{ feedback }}</strong><br>
+            正確答案：{{ correct_answer }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

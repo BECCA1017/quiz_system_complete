@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>管理後台</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>管理後台</h1>
+        <p>歡迎，管理員！</p>
+        <h2>上傳題庫 Excel</h2>
+        <form action="/admin/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx,.xls" required>
+            <button type="submit">上傳</button>
+        </form>
+
+        <h2>下載排行榜報表</h2>
+        <a href="/admin/export"><button>下載 leaderboard.csv</button></a>
+
+        <h2>題目錯誤統計</h2>
+        <table>
+            <thead>
+                <tr><th>題號</th><th>錯誤次數</th></tr>
+            </thead>
+            <tbody>
+                {% for qid, count in wrong_stats %}
+                <tr><td>{{ qid }}</td><td>{{ count }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

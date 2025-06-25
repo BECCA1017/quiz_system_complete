@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公寓大廈管理條例線上學習系統</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>公寓大廈管理條例線上學習系統</h1>
+        <form method="POST" action="/start">
+            <label for="nickname">請輸入暱稱：</label>
+            <input type="text" id="nickname" name="nickname" required>
+            {% if error %}<p class="error">{{ error }}</p>{% endif %}
+            <button type="submit">開始測驗</button>
+        </form>
+        <div class="note">
+            <p>每次測驗從題庫中隨機抽出40題，每題限時30秒。</p>
+            <p>答錯一題扣2.5分，滿分為100分。</p>
+            <p>完成測驗後將進入排行榜前50名。</p>
+        </div>
+        <div class="signature">
+            <p>中華民國公寓大廈管理維護商業同業公會全國聯合會</p>
+            <p>國土管理署公寓大廈諮詢種子教師徐源德</p>
+            <p>宜蘭縣公寓大廈公寓爭議事件調處委員黃啓昶</p>
+        </div>
+    </div>
+</body>
+</html>

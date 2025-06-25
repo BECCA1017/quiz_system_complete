@@ -68,8 +68,23 @@ def submit():
     current = session.get("current", 0)
     qid = quiz_ids[current]
     correct = str(questions[qid]["正確答案"])
-    if answer != correct:
+    is_correct = answer == correct
+    if not is_correct:
         session["score"] -= 2.5
+    session["last_answer"] = answer
+    session["last_correct"] = correct
+    session["last_question"] = questions[qid]
+    return redirect("/feedback")
+
+@app.route("/feedback")
+def feedback():
+    return render_template("intermediate.html", question=session["last_question"],
+                           selected=session["last_answer"],
+                           correct=session["last_correct"],
+                           number=session["current"]+1)
+
+@app.route("/next")
+def next_question():
     session["current"] += 1
     return redirect("/question")
 
@@ -85,7 +100,7 @@ def result():
     leaderboard.append({"nickname": nickname, "score": score, "time": used_time})
     leaderboard = sorted(leaderboard, key=lambda x: (-float(x["score"]), x["time"]))[:50]
     save_leaderboard(leaderboard)
-    return render_template("result.html", nickname=nickname, score=score, time=used_time)
+    return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
 @app.route("/favicon.ico")
 def favicon():

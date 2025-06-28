@@ -9,14 +9,25 @@
 <body>
     <div class="container">
         <h2>第 {{ number }} 題結果</h2>
-        <p><strong>題目：</strong> {{ question['題目'] }}</p>
+        <p><strong>題目：</strong> {{ question['question'] }}</p>
         <p>
             你的答案：
             <span style="color: {{ 'green' if selected == correct else 'red' }}">
-                {{ question['選項' + selected] if selected in ['1','2','3','4'] else '未作答' }}
+                {{ question['A'] if selected == '1' else
+                   question['B'] if selected == '2' else
+                   question['C'] if selected == '3' else
+                   question['D'] if selected == '4' else '未作答' }}
             </span>
         </p>
-        <p>正確答案：<strong style="color: green">{{ question['選項' + correct] }}</strong></p>
+        <p>
+            正確答案：
+            <strong style="color: green">
+                {{ question['A'] if correct == '1' else
+                   question['B'] if correct == '2' else
+                   question['C'] if correct == '3' else
+                   question['D'] if correct == '4' }}
+            </strong>
+        </p>
         <a href="/next"><button>下一題</button></a>
     </div>
 </body>

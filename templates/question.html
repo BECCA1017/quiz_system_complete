@@ -24,19 +24,19 @@
 <body>
     <div class="container">
         <h2>第 {{ number }} 題</h2>
-        <p>{{ question['題目'] }}</p>
+        <p>{{ question['question'] }}</p>
         <form id="quizForm" method="POST" action="/submit">
-            <input type="radio" name="answer" value="1" required> {{ question['選項1'] }}<br>
-            <input type="radio" name="answer" value="2"> {{ question['選項2'] }}<br>
-            <input type="radio" name="answer" value="3"> {{ question['選項3'] }}<br>
-            <input type="radio" name="answer" value="4"> {{ question['選項4'] }}<br>
+            <input type="radio" name="answer" value="1" required> {{ question['A'] }}<br>
+            <input type="radio" name="answer" value="2"> {{ question['B'] }}<br>
+            <input type="radio" name="answer" value="3"> {{ question['C'] }}<br>
+            <input type="radio" name="answer" value="4"> {{ question['D'] }}<br>
             <button type="submit">下一題</button>
         </form>
         <div class="timer-box">⏳ 剩餘時間：<span id="timer"></span> 秒</div>
         {% if feedback %}
         <div class="note">
             <strong>{{ feedback }}</strong><br>
-            正確答案：{{ correct_answer }}
+            正確答案：{{ answer }}
         </div>
         {% endif %}
     </div>

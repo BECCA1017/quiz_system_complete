@@ -68,7 +68,7 @@ def submit():
     quiz_ids = session.get("quiz_ids", [])
     current = session.get("current", 0)
     qid = quiz_ids[current]
-    correct = str(questions[qid]["正確答案"])
+    correct = str(questions[qid]["answer"])
     is_correct = answer == correct
     if not is_correct:
         session["score"] -= 5
@@ -97,10 +97,12 @@ def result():
     score = session["score"]
     start_time = datetime.fromisoformat(session["start_time"])
     used_time = (datetime.now() - start_time).seconds
+
     leaderboard = load_leaderboard()
     leaderboard.append({"nickname": nickname, "score": score, "time": used_time})
     leaderboard = sorted(leaderboard, key=lambda x: (-float(x["score"]), x["time"]))[:50]
     save_leaderboard(leaderboard)
+
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
 @app.route("/ranking")

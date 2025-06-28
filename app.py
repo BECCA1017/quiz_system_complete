@@ -97,10 +97,12 @@ def result():
     score = session["score"]
     start_time = datetime.fromisoformat(session["start_time"])
     used_time = (datetime.now() - start_time).seconds
+
     leaderboard = load_leaderboard()
     leaderboard.append({"nickname": nickname, "score": score, "time": used_time})
     leaderboard = sorted(leaderboard, key=lambda x: (-float(x["score"]), x["time"]))[:50]
     save_leaderboard(leaderboard)
+
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
 @app.route("/ranking")

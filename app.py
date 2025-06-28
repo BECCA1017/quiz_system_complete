@@ -1,11 +1,9 @@
-
 from flask import Flask, render_template, request, redirect, session, send_file
 import pandas as pd
 import random
 import csv
 from datetime import datetime
 import os
-
 
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -31,7 +29,6 @@ def load_leaderboard():
         reader = csv.DictReader(file)
         return list(reader)
 
-
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
@@ -43,9 +40,9 @@ def start():
     if any(bad in nickname.lower() for bad in banned):
         return render_template("index.html", error="請輸入適當的暱稱")
     questions = load_questions()
-    if len(questions) < 40:
-        return "題庫不足 40 題"
-    selected_ids = random.sample(range(len(questions)), 40)
+    if len(questions) < 20:
+        return "題庫不足 20 題"
+    selected_ids = random.sample(range(len(questions)), 20)
     session["quiz_ids"] = selected_ids
     session["score"] = 100
     session["current"] = 0
@@ -74,7 +71,7 @@ def submit():
     correct = str(questions[qid]["正確答案"])
     is_correct = answer == correct
     if not is_correct:
-        session["score"] -= 2.5
+        session["score"] -= 5
     session["last_answer"] = answer
     session["last_correct"] = correct
     session["last_question"] = questions[qid]
@@ -92,7 +89,6 @@ def next_question():
     session["current"] += 1
     return redirect("/question")
 
-
 @app.route("/result")
 def result():
     if "score" not in session or "nickname" not in session or "start_time" not in session:
@@ -109,10 +105,9 @@ def result():
 
 @app.route("/ranking")
 def ranking():
-    # 讀取排行榜資料
     if os.path.exists("data/ranking.csv"):
         df = pd.read_csv("data/ranking.csv")
-       df = df.sort_values(by=["score", "time"], ascending=[False, True]).head(50)
+        df = df.sort_values(by=["score", "time"], ascending=[False, True]).head(50)
         data = df.to_dict(orient="records")
     else:
         data = []

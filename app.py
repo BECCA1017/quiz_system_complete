@@ -93,14 +93,25 @@ def next_question():
 def result():
     if "score" not in session or "nickname" not in session or "start_time" not in session:
         return redirect("/")
+    
     nickname = session["nickname"]
     score = session["score"]
     start_time = datetime.fromisoformat(session["start_time"])
     used_time = (datetime.now() - start_time).seconds
 
     leaderboard = load_leaderboard()
-    leaderboard.append({"nickname": nickname, "score": score, "time": used_time})
-    leaderboard = sorted(leaderboard, key=lambda x: (-float(x["score"]), x["time"]))[:50]
+    leaderboard.append({
+        "nickname": nickname,
+        "score": score,
+        "time": used_time
+    })
+
+    # 排序前先轉換型別，避免 int 和 str 混用出錯
+    for item in leaderboard:
+        item["score"] = float(item["score"])
+        item["time"] = int(item["time"])
+
+    leaderboard = sorted(leaderboard, key=lambda x: (-x["score"], x["time"]))[:50]
     save_leaderboard(leaderboard)
 
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)

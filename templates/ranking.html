@@ -39,14 +39,15 @@
                 <th>名次</th>
                 <th>暱稱</th>
                 <th>分數</th>
-                <th>時間（秒）</th>
+                <th>用時 (秒)</th>
             </tr>
             {% for i, row in enumerate(ranking) %}
-           <tr>
-  <td>{{ row.nickname }}</td>
-  <td>{{ row.score }}</td>
-  <td>{{ row.time }}</td>
-</tr>
+            <tr>
+                <td>{{ i + 1 }}</td>
+                <td>{{ row['nickname'] }}</td>
+                <td>{{ row['score'] }}</td>
+                <td>{{ row['time'] }}</td>
+            </tr>
             {% endfor %}
         </table>
         <div style="text-align:center; margin-top:20px;">

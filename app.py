@@ -68,7 +68,7 @@ def submit():
     quiz_ids = session.get("quiz_ids", [])
     current = session.get("current", 0)
     qid = quiz_ids[current]
-    correct = str(questions[qid]["正確答案"])
+    correct = str(questions[qid]["answer"])
     is_correct = answer == correct
     if not is_correct:
         session["score"] -= 5

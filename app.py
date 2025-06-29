@@ -76,6 +76,16 @@ def submit():
     session["last_correct"] = correct
     session["last_question"] = questions[qid]
     return redirect("/feedback")
+    wrong_path = "data/wrong_stats.csv"
+if os.path.exists(wrong_path):
+    wrong_df = pd.read_csv(wrong_path)
+else:
+    wrong_df = pd.DataFrame(columns=["qid", "count"])
+if str(qid) in wrong_df["qid"].astype(str).values:
+    wrong_df.loc[wrong_df["qid"].astype(str) == str(qid), "count"] += 1
+else:
+    wrong_df = pd.concat([wrong_df, pd.DataFrame([{"qid": qid, "count": 1}])], ignore_index=True)
+wrong_df.to_csv(wrong_path, index=False)
 
 @app.route("/feedback")
 def feedback():
@@ -113,6 +123,15 @@ def result():
 
     leaderboard = sorted(leaderboard, key=lambda x: (-x["score"], x["time"]))[:50]
     save_leaderboard(leaderboard)
+    # 紀錄使用者作答紀錄
+usage_log_path = "data/usage_log.csv"
+log_entry = {"nickname": nickname, "score": score, "used_time": used_time, "timestamp": datetime.now().isoformat()}
+if os.path.exists(usage_log_path):
+    usage_df = pd.read_csv(usage_log_path)
+    usage_df = pd.concat([usage_df, pd.DataFrame([log_entry])], ignore_index=True)
+else:
+    usage_df = pd.DataFrame([log_entry])
+usage_df.to_csv(usage_log_path, index=False)
 
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
@@ -125,6 +144,37 @@ def ranking():
     else:
         data = []
     return render_template("ranking.html", ranking=data)
+
+@app.route("/admin")
+def admin():
+    total_usage = 0
+    wrong_stats = []
+    try:
+        # 計算使用次數
+        if os.path.exists("data/usage_log.csv"):
+            with open("data/usage_log.csv", newline="", encoding="utf-8") as f:
+                total_usage = sum(1 for _ in f) - 1  # 扣掉標題列
+
+        # 讀取錯題統計
+        if os.path.exists("data/wrong_stats.csv"):
+            df = pd.read_csv("data/wrong_stats.csv")
+            df = df.sort_values(by="錯誤次數", ascending=False).head(10)
+            wrong_stats = df.to_dict(orient="records")
+
+    except Exception as e:
+        print("後台資料載入失敗", e)
+
+    return render_template("admin.html", total_usage=total_usage, wrong_stats=wrong_stats)
+
+
+@app.route("/download/usage")
+def download_usage():
+    return send_file("data/usage_log.csv", as_attachment=True, download_name="使用紀錄.xlsx")
+
+
+@app.route("/download/wrong")
+def download_wrong():
+    return send_file("data/wrong_stats.csv", as_attachment=True, download_name="錯題統計.xlsx")
 
 @app.route("/favicon.ico")
 def favicon():

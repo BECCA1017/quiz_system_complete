@@ -72,20 +72,24 @@ def submit():
     is_correct = answer == correct
     if not is_correct:
         session["score"] -= 5
+
+        # 紀錄錯題統計
+        wrong_path = "data/wrong_stats.csv"
+        if os.path.exists(wrong_path):
+            wrong_df = pd.read_csv(wrong_path)
+        else:
+            wrong_df = pd.DataFrame(columns=["qid", "count"])
+
+        if str(qid) in wrong_df["qid"].astype(str).values:
+            wrong_df.loc[wrong_df["qid"].astype(str) == str(qid), "count"] += 1
+        else:
+            wrong_df = pd.concat([wrong_df, pd.DataFrame([{"qid": qid, "count": 1}])], ignore_index=True)
+        wrong_df.to_csv(wrong_path, index=False)
+
     session["last_answer"] = answer
     session["last_correct"] = correct
     session["last_question"] = questions[qid]
     return redirect("/feedback")
-    wrong_path = "data/wrong_stats.csv"
-if os.path.exists(wrong_path):
-    wrong_df = pd.read_csv(wrong_path)
-else:
-    wrong_df = pd.DataFrame(columns=["qid", "count"])
-if str(qid) in wrong_df["qid"].astype(str).values:
-    wrong_df.loc[wrong_df["qid"].astype(str) == str(qid), "count"] += 1
-else:
-    wrong_df = pd.concat([wrong_df, pd.DataFrame([{"qid": qid, "count": 1}])], ignore_index=True)
-wrong_df.to_csv(wrong_path, index=False)
 
 @app.route("/feedback")
 def feedback():
@@ -123,15 +127,21 @@ def result():
 
     leaderboard = sorted(leaderboard, key=lambda x: (-x["score"], x["time"]))[:50]
     save_leaderboard(leaderboard)
-    # 紀錄使用者作答紀錄
-usage_log_path = "data/usage_log.csv"
-log_entry = {"nickname": nickname, "score": score, "used_time": used_time, "timestamp": datetime.now().isoformat()}
-if os.path.exists(usage_log_path):
-    usage_df = pd.read_csv(usage_log_path)
-    usage_df = pd.concat([usage_df, pd.DataFrame([log_entry])], ignore_index=True)
-else:
-    usage_df = pd.DataFrame([log_entry])
-usage_df.to_csv(usage_log_path, index=False)
+
+    # ✅ 這段記錄作答紀錄也要在函式裡面！
+    usage_log_path = "data/usage_log.csv"
+    log_entry = {
+        "nickname": nickname,
+        "score": score,
+        "used_time": used_time,
+        "timestamp": datetime.now().isoformat()
+    }
+    if os.path.exists(usage_log_path):
+        usage_df = pd.read_csv(usage_log_path)
+        usage_df = pd.concat([usage_df, pd.DataFrame([log_entry])], ignore_index=True)
+    else:
+        usage_df = pd.DataFrame([log_entry])
+    usage_df.to_csv(usage_log_path, index=False)
 
     return render_template("result.html", nickname=nickname, score=score, time=used_time, leaderboard=leaderboard)
 
